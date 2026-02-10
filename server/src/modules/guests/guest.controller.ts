@@ -11,9 +11,9 @@ export const guestController = {
     }
   },
 
-  getById: async (req: Request, res: Response, next: NextFunction) => {
+  getById: async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
-      const guest = await guestService.getById(req.params.id);
+      const guest = await guestService.getById(req.params.id as string);
       res.json(guest);
     } catch (err) {
       next(err);
@@ -29,18 +29,18 @@ export const guestController = {
     }
   },
 
-  update: async (req: Request, res: Response, next: NextFunction) => {
+  update: async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
-      const guest = await guestService.update(req.params.id, req.body);
+      const guest = await guestService.update(req.params.id as string, req.body);
       res.json(guest);
     } catch (err) {
       next(err);
     }
   },
 
-  delete: async (req: Request, res: Response, next: NextFunction) => {
+  delete: async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
-      await guestService.delete(req.params.id);
+      await guestService.delete(req.params.id as string);
       res.status(204).send();
     } catch (err) {
       next(err);

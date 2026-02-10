@@ -11,7 +11,7 @@ const config: Config = {
     "!src/**/*.test.ts",
     "!src/index.ts",
   ],
-  setupFilesAfterSetup: [],
+  setupFilesAfterEnv: ["<rootDir>/src/__tests__/setup.ts"],
   transform: {
     "^.+\\.ts$": "ts-jest",
   },

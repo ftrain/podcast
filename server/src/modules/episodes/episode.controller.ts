@@ -11,9 +11,9 @@ export const episodeController = {
     }
   },
 
-  getById: async (req: Request, res: Response, next: NextFunction) => {
+  getById: async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
-      const episode = await episodeService.getById(req.params.id);
+      const episode = await episodeService.getById(req.params.id as string);
       res.json(episode);
     } catch (err) {
       next(err);
@@ -29,36 +29,36 @@ export const episodeController = {
     }
   },
 
-  update: async (req: Request, res: Response, next: NextFunction) => {
+  update: async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
-      const episode = await episodeService.update(req.params.id, req.body);
+      const episode = await episodeService.update(req.params.id as string, req.body);
       res.json(episode);
     } catch (err) {
       next(err);
     }
   },
 
-  delete: async (req: Request, res: Response, next: NextFunction) => {
+  delete: async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
-      await episodeService.delete(req.params.id);
+      await episodeService.delete(req.params.id as string);
       res.status(204).send();
     } catch (err) {
       next(err);
     }
   },
 
-  assignGuest: async (req: Request, res: Response, next: NextFunction) => {
+  assignGuest: async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
-      const result = await episodeService.assignGuest(req.params.id, req.body);
+      const result = await episodeService.assignGuest(req.params.id as string, req.body);
       res.status(201).json(result);
     } catch (err) {
       next(err);
     }
   },
 
-  removeGuest: async (req: Request, res: Response, next: NextFunction) => {
+  removeGuest: async (req: Request<{ id: string; guestId: string }>, res: Response, next: NextFunction) => {
     try {
-      await episodeService.removeGuest(req.params.id, req.params.guestId);
+      await episodeService.removeGuest(req.params.id as string, req.params.guestId as string);
       res.status(204).send();
     } catch (err) {
       next(err);

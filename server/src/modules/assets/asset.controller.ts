@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import path from "path";
 import { assetService } from "./asset.service";
 import { uploadMetadataSchema } from "./asset.schema";
 
@@ -13,9 +12,9 @@ export const assetController = {
     }
   },
 
-  getById: async (req: Request, res: Response, next: NextFunction) => {
+  getById: async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
-      const asset = await assetService.getById(req.params.id);
+      const asset = await assetService.getById(req.params.id as string);
       res.json(asset);
     } catch (err) {
       next(err);
@@ -36,18 +35,18 @@ export const assetController = {
     }
   },
 
-  delete: async (req: Request, res: Response, next: NextFunction) => {
+  delete: async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
-      await assetService.delete(req.params.id);
+      await assetService.delete(req.params.id as string);
       res.status(204).send();
     } catch (err) {
       next(err);
     }
   },
 
-  download: async (req: Request, res: Response, next: NextFunction) => {
+  download: async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
-      const asset = await assetService.getById(req.params.id);
+      const asset = await assetService.getById(req.params.id as string);
       const filePath = assetService.getFilePath(asset);
       res.download(filePath, asset.filename);
     } catch (err) {
