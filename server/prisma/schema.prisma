@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Guest {
+  id        String   @id @default(uuid())
+  name      String
+  bio       String?  @db.Text
+  photoUrl  String?  @map("photo_url")
+  email     String?
+  phone     String?
+  website   String?
+  twitter   String?
+  linkedin  String?
+  instagram String?
+  notes     String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  appearances EpisodeGuest[]
+
+  @@map("guests")
+}
+
+model Episode {
+  id          String        @id @default(uuid())
+  title       String
+  description String?       @db.Text
+  status      EpisodeStatus @default(IDEA)
+  episodeNum  Int?          @map("episode_num")
+  scheduledAt DateTime?     @map("scheduled_at")
+  publishedAt DateTime?     @map("published_at")
+  notes       String?       @db.Text
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  guests EpisodeGuest[]
+  assets Asset[]
+
+  @@map("episodes")
+}
+
+model EpisodeGuest {
+  id        String   @id @default(uuid())
+  episodeId String   @map("episode_id")
+  guestId   String   @map("guest_id")
+  role      String   @default("guest")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  episode Episode @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+  guest   Guest   @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  @@unique([episodeId, guestId])
+  @@map("episode_guests")
+}
+
+model Asset {
+  id          String        @id @default(uuid())
+  filename    String
+  storedName  String        @map("stored_name")
+  mimeType    String        @map("mime_type")
+  size        Int
+  category    AssetCategory
+  episodeId   String?       @map("episode_id")
+  description String?
+  createdAt   DateTime      @default(now()) @map("created_at")
+
+  episode Episode? @relation(fields: [episodeId], references: [id], onDelete: SetNull)
+
+  @@map("assets")
+}
+
+enum EpisodeStatus {
+  IDEA
+  PLANNED
+  RECORDING
+  EDITING
+  PUBLISHED
+}
+
+enum AssetCategory {
+  AUDIO
+  COVER_ART
+  GUEST_PHOTO
+  EPISODE_ARTWORK
+  OTHER
+}
