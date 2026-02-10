@@ -3,7 +3,10 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 
+const BASE_PATH = "/projects/podcast/";
+
 export default defineConfig({
+  base: BASE_PATH,
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
@@ -13,8 +16,14 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      "/api": "http://localhost:3000",
-      "/uploads": "http://localhost:3000",
+      [`${BASE_PATH}api`]: {
+        target: "http://localhost:3000",
+        rewrite: (p) => p.replace(BASE_PATH, "/"),
+      },
+      [`${BASE_PATH}uploads`]: {
+        target: "http://localhost:3000",
+        rewrite: (p) => p.replace(BASE_PATH, "/"),
+      },
     },
   },
 });

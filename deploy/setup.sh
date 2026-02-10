@@ -92,7 +92,7 @@ cd "$APP_DIR/server"
 sudo -u "$APP_USER" npx tsc
 echo ""
 
-# 7. Build client
+# 7. Build client (base path is set in vite.config.ts)
 echo "--- Building client ---"
 cd "$APP_DIR/client"
 sudo -u "$APP_USER" npx vite build
@@ -104,11 +104,10 @@ mkdir -p "$APP_DIR/server/uploads/audio" "$APP_DIR/server/uploads/images"
 chown -R "$APP_USER":"$APP_USER" "$APP_DIR/server/uploads"
 echo ""
 
-# 9. Configure nginx
+# 9. Configure nginx (adds to existing server, doesn't replace)
 echo "--- Configuring nginx ---"
 cp "$APP_DIR/deploy/nginx.conf" /etc/nginx/sites-available/podmanager
 ln -sf /etc/nginx/sites-available/podmanager /etc/nginx/sites-enabled/podmanager
-rm -f /etc/nginx/sites-enabled/default
 nginx -t && systemctl reload nginx
 echo ""
 
@@ -123,7 +122,7 @@ systemctl restart podmanager
 echo ""
 
 echo "=== Setup Complete ==="
-echo "The application should be running at http://localhost"
+echo "The application should be running at http://your-domain/projects/podcast/"
 echo ""
 echo "Useful commands:"
 echo "  systemctl status podmanager    - Check API status"

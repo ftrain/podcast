@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Card, Table, Select, Tag, Space, Upload, Modal, Form, Input, message, Popconfirm, Typography } from "antd";
 import { UploadOutlined, DeleteOutlined, DownloadOutlined, InboxOutlined } from "@ant-design/icons";
 import { useAssets } from "@/hooks/useAssets";
+import { api } from "@/lib/api";
 import { formatDate, formatBytes } from "@/lib/utils";
 import type { Asset, AssetCategory } from "@/types";
 
@@ -42,7 +43,7 @@ export function AssetsPage() {
       title: "Actions", key: "actions",
       render: (_: unknown, record: Asset) => (
         <Space>
-          <a href={`/api/assets/${record.id}/download`}><Button icon={<DownloadOutlined />} size="small" /></a>
+          <a href={api.url(`/assets/${record.id}/download`)}><Button icon={<DownloadOutlined />} size="small" /></a>
           <Popconfirm title="Delete?" onConfirm={async () => { await deleteAsset(record.id); message.success("Deleted"); }}>
             <Button icon={<DeleteOutlined />} size="small" danger />
           </Popconfirm>

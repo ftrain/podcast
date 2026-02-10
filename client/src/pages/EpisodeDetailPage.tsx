@@ -83,7 +83,7 @@ export function EpisodeDetailPage() {
             { title: "Type", dataIndex: "category", key: "category", render: (c: string) => <Tag>{c}</Tag> },
             { title: "Size", dataIndex: "size", key: "size", render: formatBytes },
             { title: "Uploaded", dataIndex: "createdAt", key: "createdAt", render: formatDate },
-            { title: "", key: "download", render: (_: unknown, r: Asset) => <a href={`/api/assets/${r.id}/download`}>Download</a> },
+            { title: "", key: "download", render: (_: unknown, r: Asset) => <a href={api.url(`/assets/${r.id}/download`)}>Download</a> },
           ]}
           locale={{ emptyText: "No assets linked" }}
         />

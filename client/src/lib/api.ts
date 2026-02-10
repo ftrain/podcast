@@ -1,4 +1,6 @@
-const BASE_URL = import.meta.env.VITE_API_URL ?? "/api";
+// Derive API base from Vite's base URL (e.g. "/projects/podcast/" → "/projects/podcast/api")
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+const BASE_URL = import.meta.env.VITE_API_URL ?? `${baseUrl}/api`;
 
 interface ApiError {
   error: string;
@@ -39,4 +41,6 @@ export const api = {
         return res.json() as Promise<T>;
       }
     ),
+  /** Get the full API URL for a path (useful for download links) */
+  url: (path: string) => `${BASE_URL}${path}`,
 };
